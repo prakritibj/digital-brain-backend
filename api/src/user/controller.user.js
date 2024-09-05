@@ -65,7 +65,7 @@ userController.loginUserRoute = async (req, res) => {
         }
 
         const loginusers = await userService.findByUserName(userName)
-        // console.log(loginusers, "log")
+        console.log(loginusers,"log")
 
         if (!loginusers) {
             return res.send({ status: "Err", msg: "user not found", data: null })

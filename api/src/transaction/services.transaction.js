@@ -4,7 +4,7 @@ const transactionService = {}
 
 transactionService.createTransaction = async ({ heading, category, link})=>{
      const trans = await trasaction.create({heading, category, link})
-     console.log(trans, "trans")
+    //  console.log(trans, "trans")
      return trans
 }
 // /////////////////////////////

@@ -12,7 +12,7 @@ userService.registerUser = async({name,userName,password})=>{
 // by username
 // find array deta hai
 userService.findByUserName = async(userName)=>{
-    return  user.find({userName})
+    return await user.find({userName})
 }
 
 
@@ -24,7 +24,11 @@ userService.getAllUsers = async (id) => {
 
 // find object deta hai
 userService.loginUsers = async(userName,password)=>{
-    return user.findOne({userName,password})
+    return await user.findOne({userName,password})
 }
+
+
+// for profile
+
 
 module.exports = userService
