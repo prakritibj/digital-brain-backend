@@ -1,15 +1,15 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose") 
 
 const noteSchema= mongoose.Schema({
-    name: {
+   
+    tittle: {
         type: String,
         required: true,
     },
-    parent: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-        default: null,
-    }
+    writeNote: {
+        type: String,
+        required: true,
+    },
 });
 
 module.exports = mongoose.model("note", noteSchema);

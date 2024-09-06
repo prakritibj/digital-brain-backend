@@ -1,18 +1,14 @@
 const Joi = require("joi")
 
 const userValidationSchema = Joi.object({
-  name: Joi.string().required()
+  name: Joi.string().required().trim()
     .messages({
-      'string.base': 'Name should be a type of string',
-      'string.empty': 'Name cannot be empty',
-      'any.required': 'Name is required'
+      'string.empty': 'Name is required'
     }),
   
-  userName: Joi.string().required()
+  userName: Joi.string().required().trim()
     .messages({
-      'string.base': 'Username should be a type of string',
-      'string.empty': 'Username cannot be empty',
-      'any.required': 'Username is required'
+     'string.empty': 'Name is required'
     }),
   
   password: Joi.string().required()
@@ -36,4 +32,4 @@ const userValidationSchema = Joi.object({
     })
 });
 
-module.exports = userValidationSchema;
+module.exports = {userValidationSchema};

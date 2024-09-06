@@ -2,8 +2,8 @@ const trasaction = require("./model.transaction")
 const transactionService = {}
 
 
-transactionService.createTransaction = async ({ heading, category, link})=>{
-     const trans = await trasaction.create({heading, category, link})
+transactionService.createTransaction = async ({  name, category, link})=>{
+     const trans = await trasaction.create({ name, category, link})
     //  console.log(trans, "trans")
      return trans
 }

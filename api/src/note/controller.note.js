@@ -16,9 +16,9 @@ noteController.createNote = async (req, res) => {
 
         return res.send({
             status: "Ok", msg: " note created successfully", data: newNote
-        });
+        })
     } catch (error) {
-        console.error('Create note error:', error);
+        console.error('Create note error:', error)
         return res.send({
             status: "Err", msg: "Error creating note", data: null
         })

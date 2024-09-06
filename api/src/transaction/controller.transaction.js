@@ -3,17 +3,17 @@ const transactionService = require("./services.transaction");
 
 const transactionController = {};
 
-// Create a newtransaction
+// Create a newtransaction 
 transactionController.createTransaction = async (req, res) => {
-    const { heading, category, link } = req.body;
-    if (!heading || !category || !link) {
+    const { name, category, link } = req.body;
+    if (! name || !category || !link) {
 
         return res.send({
-            status: "Err", msg: "heading, category, and link are required", data: null
-        });
+            status: "Err", msg: " name, category, and link are required", data: null
+        })
     }
     try {
-        const newtransaction= await transactionService.createTransaction({ heading, category, link });
+        const newtransaction= await transactionService.createTransaction({  name, category, link });
         // console.log(newtransaction,"newtransaction")
        
         return res.send({status:"Ok",msg: " transaction created successfully",data: newtransaction

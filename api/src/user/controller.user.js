@@ -20,6 +20,8 @@ userController.registerUser = async (req, res) => {
         })
     }
 
+
+
     // find by user name check
     const userNameCheck = await userService.findByUserName(userName)
     // console.log(userNameCheck, "chek")
@@ -29,7 +31,13 @@ userController.registerUser = async (req, res) => {
 
     try {
         const createdUser = await userService.registerUser({ name, userName, password, confirmPassword })
-        return res.send({ status: "OK", msg: "user registered sucessfully", data: createdUser })
+        // return res.send({ status: "OK", msg: "user registered sucessfully", data: createdUser })
+        if (createdUser){
+
+            let token = jwttoken.sign({ _id: createdUser._id }, process.env.TOKEN_SECRET)
+            return res.send({ status: "OK", msg: "user registered sucessfully", data: createdUser , token:token})
+
+        }
     } catch (error) {
         console.log(error, "register error")
         return res.send({ status: "err", msg: "somthing went wrong", data: null })
@@ -66,6 +74,7 @@ userController.loginUserRoute = async (req, res) => {
 
         const loginusers = await userService.findByUserName(userName)
         console.log(loginusers,"log")
+
 
         if (!loginusers) {
             return res.send({ status: "Err", msg: "user not found", data: null })
