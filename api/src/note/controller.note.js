@@ -11,7 +11,7 @@ noteController.createNote = async (req, res) => {
         })
     }
     try {
-        const newNote = await noteService.createNote({ tittle, writeNote });
+        const newNote = await noteService.createNote({ tittle, writeNote })
         console.log(newNote, "newnote")
 
         return res.send({
@@ -28,21 +28,54 @@ noteController.createNote = async (req, res) => {
 
 
 // get all note
+// noteController.getAllNotes = async (req, res) => {
+//     try {
+//         const AllNote = await noteService.getAllNote()
+//         console.log(AllNote ,"hii")
+//         if (AllNote.length) {
+//             return res.send({ status: "OK", msg:"all notes data getted",data:AllNote  })
+//         }
+//         return res.send({ msg: "notes are not found", data: null, status: false })
+//     } catch (err) {
+//         console.log(err)
+//         return res.send({ status: "ERR", data: [], error: err })
+//     }
+// }
+// ------------------------------------------------------------------------/////////////////////
+
+// get all note
 noteController.getAllNotes = async (req, res) => {
     try {
-        const AllNote = await noteService.getAllNote()
-        console.log(AllNote ,"hii")
-        if (AllNote.length) {
-            return res.send({ status: "OK", msg:"all notes data getted",data:AllNote  })
+        const { startDate, endDate, page = 1, limit = 10 } = req.query; // Get query parameters
+        const paginationParams = {
+            startDate,
+            endDate,
+            page: parseInt(page, 10),
+            limit: parseInt(limit, 10)
+        };
+
+        const result = await noteService.getAllNote(paginationParams);
+
+        if (result.notes.length) {
+            return res.send({
+                status: "OK",
+                msg: "all notes data retrieved",
+                data: {
+                    notes: result.notes,
+                    total: result.total,
+                    currentPage: paginationParams.page,
+                    totalPages: Math.ceil(result.total / paginationParams.limit)
+                }
+            });
         }
-        return res.send({ msg: "notes are not found", data: null, status: false })
+        return res.send({ msg: "notes are not found", data: null, status: false });
     } catch (err) {
-        console.log(err)
-        return res.send({ status: "ERR", data: [], error: err })
+        console.log(err);
+        return res.send({ status: "ERR", data: [], error: err });
     }
-}
+};
 
-
+// ---------------------------------------------------------------------------////////////////
 // Delete a note
 noteController.deleteNote = async (req, res) => {
     const { id } = req.params;

@@ -5,15 +5,15 @@ const transactionController = {};
 
 // Create a newtransaction 
 transactionController.createTransaction = async (req, res) => {
-    const { name, category, link } = req.body;
-    if (! name || !category || !link) {
+    const {heading ,name, category, link } = req.body;
+    if (!heading ||! name || !category || !link) {
 
         return res.send({
             status: "Err", msg: " name, category, and link are required", data: null
         })
     }
     try {
-        const newtransaction= await transactionService.createTransaction({  name, category, link });
+        const newtransaction= await transactionService.createTransaction({  heading,name, category, link });
         // console.log(newtransaction,"newtransaction")
        
         return res.send({status:"Ok",msg: " transaction created successfully",data: newtransaction
@@ -27,19 +27,52 @@ transactionController.createTransaction = async (req, res) => {
 }
 
 // get all transaction
+// transactionController.getAllTransactions = async (req, res) => {
+//     try {
+//         const getAlltransaction = await transactionService.getAllTransactions()
+//         // console.log(getAlltransaction ,"hii")
+//         if (getAlltransaction.length) {
+//             return res.send({ status: "OK", data: getAlltransaction })
+//         }
+//         return res.send({ msg: "transaction not found", data: null, status: false })
+//     } catch (err) {
+//         console.log(err)
+//         return res.send({ status: "ERR", data: [], error: err })
+//     }
+// }
+
+// --------------------------------------------------------------------------//
 transactionController.getAllTransactions = async (req, res) => {
     try {
-        const getAlltransaction = await transactionService.getAllTransactions()
-        // console.log(getAlltransaction ,"hii")
-        if (getAlltransaction.length) {
-            return res.send({ status: "OK", data: getAlltransaction })
+        const { startDate, endDate, page = 1, limit = 5 } = req.query; 
+        const paginationParams = {
+            startDate,
+            endDate,
+            page: parseInt(page),
+            limit: parseInt(limit)
+        };
+
+        const result = await transactionService.getAllTransactions(paginationParams);
+
+        if (result.transactions.length) {
+            return res.send({
+                status: "OK",
+                data: {
+                    transactions: result.transactions,
+                    total: result.total,
+                    currentPage: page,
+                    totalPages: Math.ceil(result.total / limit)
+                }
+            });
         }
-        return res.send({ msg: "transaction not found", data: null, status: false })
+        return res.send({ msg: "Transactions not found", data: null, status: false });
     } catch (err) {
-        console.log(err)
-        return res.send({ status: "ERR", data: [], error: err })
+        console.log(err);
+        return res.send({ status: "ERR", data: [], error: err });
     }
-}
+};
+
+// --------------------------------------------------------------------------//
 
 // Update a transaction
 transactionController.updateTransaction = async (req, res) => {

@@ -45,20 +45,6 @@ userController.registerUser = async (req, res) => {
     }
 
 }
-// get all users
-userController.getAllUser = async (req, res) => {
-    try {
-        const getAllUserdata= await userService.getAllUsers()
-        // console.log(getAllUserdata,"hii")
-        if (getAllUserdata.length) {
-            return res.send({ status: "OK", msg:"all user data getted", data: getAllUserdata})
-        }
-        return res.send({ msg: "users not found", data: null, status: false })
-    } catch (err) {
-        console.log(err)
-        return res.send({ status: "ERR", data: [], error: err })
-    }
-}
 
 // login
 userController.loginUserRoute = async (req, res) => {
@@ -75,10 +61,10 @@ userController.loginUserRoute = async (req, res) => {
         const loginusers = await userService.findByUserName(userName)
         console.log(loginusers,"log")
 
-
         if (!loginusers) {
             return res.send({ status: "Err", msg: "user not found", data: null })
         }
+        
 
         let { password: hash } = loginusers[0]
         let compare = bcrypt.compareSync(password, hash)
@@ -95,6 +81,22 @@ userController.loginUserRoute = async (req, res) => {
         console.log(err)
     }
 }
+
+// profile
+userController.getAllUsers = async (req, res) => {
+   const {id} = req.params
+   console.log(id,"id")
+    try {
+        const user = await userService.getAllUsers(id)
+        console.log(user,"user")
+        if(user){
+            res.send({status: "ok", data: user.name})
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = userController
 

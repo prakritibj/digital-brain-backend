@@ -8,6 +8,6 @@ const {error}  = schema.validate(req.body)
       });
     }
     next();
-    };
+    }
     
    module.exports = validate
