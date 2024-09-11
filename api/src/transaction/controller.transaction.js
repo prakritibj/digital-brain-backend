@@ -5,15 +5,15 @@ const transactionController = {};
 
 // Create a newtransaction 
 transactionController.createTransaction = async (req, res) => {
-    const {heading ,name, category, link } = req.body;
-    if (!heading ||! name || !category || !link) {
+    const {name, category, link } = req.body;
+    if (!name || !category || !link) {
 
         return res.send({
             status: "Err", msg: " name, category, and link are required", data: null
         })
     }
     try {
-        const newtransaction= await transactionService.createTransaction({  heading,name, category, link });
+        const newtransaction= await transactionService.createTransaction({name, category, link });
         // console.log(newtransaction,"newtransaction")
        
         return res.send({status:"Ok",msg: " transaction created successfully",data: newtransaction

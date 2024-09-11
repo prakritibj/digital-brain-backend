@@ -4,23 +4,23 @@ const categoryController = {};
 
 // Create a newtransaction
 categoryController.createCategory = async (req, res) => {
-    const { heading } = req.body;
-    if (!heading) {
+    const {categoryName} = req.body;
+    if (!categoryName) {
         return res.send({
-            status: "Err", msg: " heading is required", data: null
+            status: "Err", msg: "  categoryName is required", data: null
         })
     }
     try {
-        const exists = await categoryService.categoryExists(heading);
+        const exists = await categoryService.categoryExists( categoryName);
         console.log(exists,"exist")
         if (exists) {
             return res.send({
                 status: "Err",
-                msg: "Category with this heading already exists",
+                msg: "Category with this  categoryName already exists",
                 data: null
             });
         }
-        const newCategory = await categoryService.createCategory({heading})
+        const newCategory = await categoryService.createCategory({ categoryName})
         console.log(newCategory, "newcategory")
         return res.send({
             status: "Ok", msg: " category created successfully", data: newCategory

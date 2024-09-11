@@ -2,10 +2,10 @@ const category = require("./model.category")
 const categoryService = {}
 
 
-categoryService.createCategory = async ({heading})=>{
-     const categorys = await category.create({heading})
-     console.log(categorys, "category")
-     return categorys
+categoryService.createCategory = async ({categoryName,id})=>{
+     const categories = await category.create({categoryName ,id})
+     console.log(categories, "category")
+     return categories
 }
 // /////////////////////////////
 // Get all category
@@ -13,8 +13,8 @@ categoryService.getAllcategory = async (id) => {
         return await category.find({id});
 };
 
-categoryService.categoryExists = async (heading) => {
-    return await category.findOne({heading });
+categoryService.categoryExists = async (categoryName) => {
+    return await category.findOne({categoryName });
 };
 
 // // Delete a category by ID
