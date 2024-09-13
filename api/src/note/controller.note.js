@@ -7,7 +7,7 @@ noteController.createNote = async (req, res) => {
     const { tittle, writeNote } = req.body;
     if (!tittle || !writeNote) {
         return res.send({
-            status: "Err", msg: "tittle and writenote are required", data: null
+            status: false, msg: "tittle and writenote are required", data: null
         })
     }
     try {
@@ -15,12 +15,12 @@ noteController.createNote = async (req, res) => {
         console.log(newNote, "newnote")
 
         return res.send({
-            status: "Ok", msg: " note created successfully", data: newNote
+            status: true, msg: " note created successfully", data: newNote
         })
     } catch (error) {
         console.error('Create note error:', error)
         return res.send({
-            status: "Err", msg: "Error creating note", data: null
+            status: false, msg: "Error creating note", data: null
         })
 
     }
@@ -33,12 +33,12 @@ noteController.createNote = async (req, res) => {
 //         const AllNote = await noteService.getAllNote()
 //         console.log(AllNote ,"hii")
 //         if (AllNote.length) {
-//             return res.send({ status: "OK", msg:"all notes data getted",data:AllNote  })
+//             return res.send({ status: true, msg:"all notes data getted",data:AllNote  })
 //         }
 //         return res.send({ msg: "notes are not found", data: null, status: false })
 //     } catch (err) {
 //         console.log(err)
-//         return res.send({ status: "ERR", data: [], error: err })
+//         return res.send({ status: false, data: [], error: err })
 //     }
 // }
 // ------------------------------------------------------------------------/////////////////////
@@ -58,7 +58,7 @@ noteController.getAllNotes = async (req, res) => {
 
         if (result.notes.length) {
             return res.send({
-                status: "OK",
+                status: true,
                 msg: "all notes data retrieved",
                 data: {
                     notes: result.notes,
@@ -71,7 +71,7 @@ noteController.getAllNotes = async (req, res) => {
         return res.send({ msg: "notes are not found", data: null, status: false });
     } catch (err) {
         console.log(err);
-        return res.send({ status: "ERR", data: [], error: err });
+        return res.send({ status: false, data: [], error: err });
     }
 };
 
@@ -82,7 +82,7 @@ noteController.deleteNote = async (req, res) => {
 
     if (!id) {
         return res.send({
-            status: "Err",
+            status: false,
             msg: "noteID is required",
             data: null
         });
@@ -91,20 +91,20 @@ noteController.deleteNote = async (req, res) => {
         const deleteNote = await noteService.deleteNote(id);
         if (!deleteNote) {
             return res.send({
-                status: "Err",
+                status: false,
                 msg: "note not found",
                 data: null
             });
         }
         return res.send({
-            status: "OK",
+            status: true,
             msg: "note deleted successfully",
             data: deleteNote
         });
     } catch (error) {
         console.error('Delete note error:', error);
         return res.send({
-            status: "Err",
+            status: false,
             msg: "Error note transaction",
             data: null
         });

@@ -7,7 +7,7 @@ categoryController.createCategory = async (req, res) => {
     const {categoryName} = req.body;
     if (!categoryName) {
         return res.send({
-            status: "Err", msg: "  categoryName is required", data: null
+            status: false, msg: "  categoryName is required", data: null
         })
     }
     try {
@@ -15,7 +15,7 @@ categoryController.createCategory = async (req, res) => {
         console.log(exists,"exist")
         if (exists) {
             return res.send({
-                status: "Err",
+                status: false,
                 msg: "Category with this  categoryName already exists",
                 data: null
             });
@@ -28,7 +28,7 @@ categoryController.createCategory = async (req, res) => {
     } catch (error) {
         console.error('Creat category  error:', error)
         return res.send({
-            status: "Err", msg: "Error creating category", data: null
+            status: false, msg: "Error creating category", data: null
         })
 
     }
@@ -46,7 +46,7 @@ categoryController.getAllCategory = async (req, res) => {
         return res.send({ msg: "notes are not found", data: null, status: false })
     } catch (err) {
         console.log(err)
-        return res.send({ status: "ERR", data: [], error: err })
+        return res.send({ status: false, data: [], error: err })
     }
 }
 
@@ -57,7 +57,7 @@ categoryController.deletecategory = async (req, res) => {
 
     if (!id) {
         return res.send({
-            status: "Err",
+            status: false,
             msg: "categoryID is required",
             data: null
         });
@@ -66,7 +66,7 @@ categoryController.deletecategory = async (req, res) => {
         const deleteCategory = await categoryService.deletecategory(id);
         if (!deleteCategory) {
             return res.send({
-                status: "Err",
+                status: false,
                 msg: "category not found",
                 data: null
             });
@@ -79,7 +79,7 @@ categoryController.deletecategory = async (req, res) => {
     } catch (error) {
         console.error('Delete category error:', error);
         return res.send({
-            status: "Err",
+            status: false,
             msg: "Error category ",
             data: null
         });
@@ -95,7 +95,7 @@ categoryController.updateCategory = async (req, res) => {
 
     if (!id) {
         return res.send({
-            status: "Err",
+            status: false,
             msg: "category ID is required",
             data: null
         });
@@ -104,7 +104,7 @@ categoryController.updateCategory = async (req, res) => {
         const updatedcategory= await categoryService.updateCategory(id, updateData);
         if (!updatedcategory) {
             return res.send({
-                status: "Err",
+                status: false,
                 msg: "category not found",
                 data: null
             })
@@ -117,7 +117,7 @@ categoryController.updateCategory = async (req, res) => {
     } catch (error) {
         console.error('Update category error:', error);
         return res.send({
-            status: "Err",
+            status: false,
             msg: "Error updating category",
             data: null
         });

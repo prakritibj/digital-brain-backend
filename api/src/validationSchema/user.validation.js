@@ -10,6 +10,9 @@ const userValidationSchema = Joi.object({
     .messages({
      'string.empty': 'Name is required'
     }),
+    // captical
+    // number
+    // spacial character
   
   password: Joi.string().required()
     .messages({
