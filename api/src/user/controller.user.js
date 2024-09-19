@@ -16,11 +16,9 @@ userController.registerUser = async (req, res) => {
     }
     if (password !== confirmPassword) {
         return res.send({
-            status: false, msg: " do not match password", data: null
+            status: false, msg: "do not match password", data: null
         })
     }
-
-
 
     // find by user name check
     const userNameCheck = await userService.findByUserName(userName)
@@ -96,6 +94,21 @@ userController.getAllUsers = async (req, res) => {
         console.log(error)
     }
 }
+
+
+// userController.getUserById  = async (req, res) => {
+//     const {id} = req.params
+//     console.log(id,"id")
+//      try {
+//          const user = await userService.getUserById(id)
+//          console.log(user,"user")
+//          if(user){
+//              res.send({status: true, data: user.name})
+//          }
+//      } catch (error) {
+//          console.log(error)
+//      }
+//  }
 
 
 module.exports = userController

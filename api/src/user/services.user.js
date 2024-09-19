@@ -28,6 +28,10 @@ userService.loginUsers = async(userName,password)=>{
 }
 
 
+// userService.getUserById = async (id) => {
+//     return await user.findById(id)
+// }
+
 
 
 // for profile

@@ -1,5 +1,5 @@
-
 const categoryService = require("./service.category");
+const subcategoryService = require("../subcategorys/services.subcategory")
 const categoryController = {};
 
 // Create a newtransaction
@@ -50,6 +50,37 @@ categoryController.getAllCategory = async (req, res) => {
     }
 }
 
+// ---------------------------------------------------
+
+categoryController.getSubcategoriesByCategoryId = async (req,res)=>{
+    // categoryId
+    const { id } = req.params;
+    console.log(id,"id")
+
+    if (!id) {
+        return res.send({
+            status: false,
+            msg: "Category id is required",
+            data: null
+        })
+    }
+    try{
+        const subcategories =  await subcategoryService.getSubcategoriesByCategoryId(id)
+        console.log(subcategories, "subcate")
+
+        if (subcategories.length) {
+            return res.send({ status: "true", msg:"subcategory as pr categoryid recive succssfully",data:subcategories })
+        }
+        return res.send({ msg: "there is no subcategories", data: null, status: false })
+    } catch (err) {
+        console.log(err , "subcategory error")
+        return res.send({ status: false, data: [], error: err })
+    }
+
+    }
+
+
+
 
 // Delete a note
 categoryController.deletecategory = async (req, res) => {
@@ -87,7 +118,6 @@ categoryController.deletecategory = async (req, res) => {
 };
 
 
-// 
 
 categoryController.updateCategory = async (req, res) => {
     const { id } = req.params;

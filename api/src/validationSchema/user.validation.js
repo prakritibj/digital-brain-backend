@@ -1,6 +1,6 @@
 const Joi = require("joi")
-
 const userValidationSchema = Joi.object({
+  
   name: Joi.string().required().trim()
     .messages({
       'string.empty': 'Name is required'
@@ -8,25 +8,19 @@ const userValidationSchema = Joi.object({
   
   userName: Joi.string().required().trim()
     .messages({
-     'string.empty': 'Name is required'
-    }),
-    // captical
-    // number
-    // spacial character
-  
-  password: Joi.string().required()
-    .messages({
-      'string.base': 'Password should be a type of string',
-      'string.empty': 'Password cannot be empty',
-      'any.required': 'Password is required'
+     'string.empty': 'username is required'
     }),
   
-  confirmPassword: Joi.string().valid(Joi.ref('password')).required()
+  
+  password: Joi.string().required().trim()
     .messages({
-      'string.base': 'Confirm Password should be a type of string',
+      'string.empty': 'Password is required',
+     
+    }),
+  
+  confirmPassword: Joi.string().valid(Joi.ref('password')).required().trim()
+    .messages({
       'string.empty': 'Confirm Password cannot be empty',
-      'any.required': 'Confirm Password is required',
-      'any.only': 'Confirm Password must match Password'
     }),
   
   isDeleted: Joi.boolean().optional()
@@ -35,4 +29,18 @@ const userValidationSchema = Joi.object({
     })
 });
 
-module.exports = {userValidationSchema};
+// login
+
+const loginValidationSchema = Joi.object({
+  userName: Joi.string().required().trim()
+    .messages({
+      'string.empty': 'User name is required'
+    }),
+  
+  password: Joi.string().required().trim()
+    .messages({
+      'string.empty': 'Password cannot be empty',
+    })
+});
+
+module.exports = {userValidationSchema, loginValidationSchema};

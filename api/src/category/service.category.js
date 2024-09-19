@@ -7,7 +7,7 @@ categoryService.createCategory = async ({categoryName,id})=>{
      console.log(categories, "category")
      return categories
 }
-// /////////////////////////////
+
 // Get all category
 categoryService.getAllcategory = async (id) => {
         return await category.find({id});

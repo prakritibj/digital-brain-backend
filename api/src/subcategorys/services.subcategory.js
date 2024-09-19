@@ -8,13 +8,19 @@ subcategoryService.createSubcategory = async ({ subcategoryName, categoryId }) =
     return newSubcategory
 }
 
-// Get subcategories,category by id 
-subcategoryService.getAllSubcategories = async (categoryId) => {
-    if (categoryId) {
-        return await subcategory.find({ categoryId })
-    }
-    return await subcategory.find({})
+// -------------------subcategory ko id se category id se 
+subcategoryService.getSubcategoriesByCategoryId = async (categoryId) => {
+    return await subcategory.find({ categoryId });
+};
+
+// create new subcategory
+subcategoryService.createSubcategory = async( resposnseoHere) =>{
+    const Subcategory = new subcategory(resposnseoHere)
+    return await Subcategory.save()
 }
+
+// -----------------------------------------------------------------------------------
+
 
 // existsting subcategory 
 subcategoryService.subcategoryExists = async (subcategoryName) => {
