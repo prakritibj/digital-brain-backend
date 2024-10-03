@@ -10,17 +10,22 @@ subcategoryService.createSubcategory = async ({ subcategoryName, categoryId }) =
 
 // -------------------subcategory ko id se category id se 
 subcategoryService.getSubcategoriesByCategoryId = async (categoryId) => {
-    return await subcategory.find({ categoryId });
+    console.log(categoryId)
+    let res = await subcategory.find({ categoryId });
+
+    return res
 };
-
-// create new subcategory
-subcategoryService.createSubcategory = async( resposnseoHere) =>{
-    const Subcategory = new subcategory(resposnseoHere)
-    return await Subcategory.save()
-}
-
 // -----------------------------------------------------------------------------------
 
+
+//  get all subcategory
+subcategoryService.getAllSubcategories = async (id) => {
+    return await subcategory.find({id, isDeleted: false});
+};
+// singlesubcategory
+subcategoryService.getSingleSubCategory = async (id) => {
+    return await subcategory.findById(id);
+};
 
 // existsting subcategory 
 subcategoryService.subcategoryExists = async (subcategoryName) => {
@@ -28,8 +33,8 @@ subcategoryService.subcategoryExists = async (subcategoryName) => {
 }
 
 // Delete subcategory by ID
-subcategoryService.deleteSubcategory = async (id) => {
-    return await subcategory.findByIdAndDelete(id)
+subcategoryService.deleteSubcategory = async (id,updateField) => {
+    return await subcategory.findByIdAndUpdate({_id: id}, {...updateField}, {new :true})
 }
 
 // Update a subcategory by ID

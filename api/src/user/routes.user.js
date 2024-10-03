@@ -7,8 +7,8 @@ const authHelper = require("../../helpers/authHelper")
 
 const router = express.Router()
 router.post("/register",validate(userValidationSchema),userController.registerUser)
-// router.get("/getalluser", userController.getAllUser)
+router.get("/getalluser",authHelper, userController.getAllUsers)
 router.post("/login" , validate(loginValidationSchema),userController.loginUserRoute)
-router.get("/profile/:id", authHelper, userController.getAllUsers)
+// router.get("/profile/:id", authHelper, userController.getAllUsers)
 
 module.exports = router

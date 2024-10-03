@@ -66,16 +66,18 @@ userController.loginUserRoute = async (req, res) => {
 
         let { password: hash } = loginusers[0]
         let compare = bcrypt.compareSync(password, hash)
-        // console.log(compare)
         if (compare) {
+            console.log(compare)
             //  token
             let token = jwttoken.sign({ _id: loginusers._id }, process.env.TOKEN_SECRET)
-            // console.log(token, "token")
+            console.log(token, "token")
             return res.send({ status: true, msg: "user login", data: { token: token, name: loginusers[0].name, userName: loginusers[0].userName } })
         } else {
             return res.send({ status: false, msg: "user not login", data: null })
         }
     } catch (err) {
+        
+        console.log("Here")
         console.log(err)
     }
 }
@@ -96,25 +98,19 @@ userController.getAllUsers = async (req, res) => {
 }
 
 
-// userController.getUserById  = async (req, res) => {
-//     const {id} = req.params
-//     console.log(id,"id")
-//      try {
-//          const user = await userService.getUserById(id)
-//          console.log(user,"user")
-//          if(user){
-//              res.send({status: true, data: user.name})
-//          }
-//      } catch (error) {
-//          console.log(error)
-//      }
-//  }
+userController.getUserById  = async (req, res) => {
+    const {id} = req.params
+    console.log(id,"id")
+     try {
+         const user = await userService.getUserById(id)
+         console.log(user,"user")
+         if(user){
+             res.send({status: true, data: user.name})
+         }
+     } catch (error) {
+         console.log(error)
+     }
+ }
 
 
 module.exports = userController
-
-
-
-
-
-

@@ -1,5 +1,6 @@
 const category = require("./model.category")
 const categoryService = {}
+// const subcategorymodel =  require("../subcategorys/model.subcategory")
 
 
 categoryService.createCategory = async ({categoryName,id})=>{
@@ -10,21 +11,25 @@ categoryService.createCategory = async ({categoryName,id})=>{
 
 // Get all category
 categoryService.getAllcategory = async (id) => {
-        return await category.find({id});
-};
+        return await category.find({id, isDeleted: false})
+}
 
-categoryService.categoryExists = async (categoryName) => {
-    return await category.findOne({categoryName });
-};
+categoryService.categoryExists = async (categoryName ,id) => {
+    return await category.findOne({categoryName,id })
+}
 
 // // Delete a category by ID
-categoryService.deletecategory = async (id) => {
-        return await category.findByIdAndDelete(id)
-};
+categoryService.deletecategory = async (id,updateField) => {
+        return await category.findByIdAndUpdate({_id: id}, {...updateField}, {new :true})
+}
+
+categoryService.getSingleCategory = async (id) => {
+    return await category.findById(id)
+}
 
 // // update a category by ID
 categoryService.updateCategory = async (id, updates) => {
-    return await category.findByIdAndUpdate(id, updates, { new: true });
+    return await category.findByIdAndUpdate(id, updates, { new: true })
 }
 module.exports = categoryService
 

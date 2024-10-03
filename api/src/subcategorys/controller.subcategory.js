@@ -1,4 +1,6 @@
 const subcategoryService = require('./services.subcategory')
+// const resourseService = require("../resources/services.resource")
+const resourseService = require("../resources/services.resource")
 const subcategoryController = {}
 
 // Create a new subcategory
@@ -38,21 +40,71 @@ try {
 }
 }
 
-// Get all subcategories
+
+// subcategoryController.getAllSubcategories = async (req, res) => {
+//     try {
+//         const AllSubCategory = await subcategoryService.getAllSubcategories()
+//         console.log(AllSubCategory ,"hii")
+//         if (AllSubCategory.length) {
+//             return res.send({ status: true, msg:"all subcategory data getted",data:AllSubCategory  })
+//         }
+//         return res.send({ msg: "subcategories are not found", data: null, status: false })
+//     } catch (err) {
+//         console.log(err)
+//         return res.send({ status: false, data: [], error: err })
+//     }
+// }
+// get all subcategories via resourses
+// ===========================================
 subcategoryController.getAllSubcategories = async (req, res) => {
     try {
-        const subcategories = await subcategoryService.getAllSubcategories()
-        console.log(subcategories, "subcategorys")
-        if (subcategories.length) {
-            return res.send({ status:true, msg: "Subcategories retrieved successfully", data: subcategories })
-        }
-        return res.send({ status:true, msg: "No subcategories found", data: [] })
-    } catch (error) {
-        console.error('Get subcategories error:', error)
-        return res.send({ status: false, msg: "Error retrieving subcategories", data: null })
-    }
-}
+        // Fetch all subcategories
+        const allSubcategories = await subcategoryService.getAllSubcategories();
+        // Fetch all resources
+        const allResources = await  resourseService.getAllResourse();
 
+        // Map over all subcategories to construct the final array
+        const finalArray = allSubcategories.map((subCat) => {
+            console.log(subCat?._id.toString(), "allResources");
+
+            return {
+                subcategoryId: subCat._id,
+                subcategoryName: subCat.subcategoryName,
+                resources: allResources.filter(res => res.subcategoryId.toString() === subCat._id.toString()) // Adjust this as needed
+            };
+        }); 
+
+        return res.send({
+            status: true,
+            msg: "All subcategories retrieved successfully",
+            data: finalArray
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send({
+            status: false,
+            data: [],
+            error: err.message
+        });
+    }
+};
+
+// ====================================
+// / Get single subcategory
+subcategoryController.getSingleSubCategory = async (req, res) =>{
+    const { id } = req.params;
+    try {
+        const getSingleSubcategory = await subcategoryService.getSingleSubCategory(id)
+        console.log(getSingleSubcategory ,"getsingle subcategory")
+        if (getSingleSubcategory) {
+            return res.send({ status: true, msg:" data getted",data: getSingleSubcategory })
+        }
+        return res.send({ msg: "subategory are not found", data: null, status: false })
+    } catch (err) {
+        console.log(err)
+        return res.send({ status: false, data: [], error: err })
+    }
+  }
 // Delete a subcategory
 subcategoryController.deleteSubcategory = async (req, res) => {
     const { id } = req.params
@@ -66,7 +118,7 @@ if (!id) {
 }
 
 try {
-    const deleted = await subcategoryService.deleteSubcategory(id)
+    const deleted = await subcategoryService.deleteSubcategory(id ,{$set : {isDeleted : true}})
     if (!deleted) {
         return res.send({
             status: false,
@@ -104,7 +156,7 @@ if (!id) {
 
 try {
     const updated = await subcategoryService.updateSubcategory(id, updateData)
-    if (!updated) {
+    if (!updated || updated.isDeleted) {
         return res.send({
             status: false,
             msg: "Subcategory not found",
@@ -125,5 +177,41 @@ try {
     })
 }
 }
+
+
+// Get a single subcategory along with its resources
+subcategoryController.getSubcategoryWithResources = async (req, res) => {
+    const { id } = req.params;
+    try {
+        // Fetch the single subcategory
+        const subcategory = await subcategoryService.getSingleSubCategory(id);
+        if (!subcategory) {
+            return res.send({ msg: "Subcategory not found", data: null, status: false });
+        }
+        
+        // Fetch all resources
+        const allResources = await resourseService.getAllResourse();
+
+        // Filter resources related to the specific subcategory
+        const relatedResources = allResources.filter(res => res.subcategoryId.toString() === subcategory._id.toString());
+
+        return res.send({
+            status: true,
+            msg: "Subcategory and related resources retrieved successfully",
+            data: {
+                subcategory,
+                resources: relatedResources
+            }
+        });
+    } catch (err) {
+        console.error(err);
+        return res.send({
+            status: false,
+            data: [],
+            error: err.message
+        });
+    }
+};
+
 
 module.exports = subcategoryController

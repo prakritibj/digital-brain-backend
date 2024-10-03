@@ -15,7 +15,7 @@ userService.findByUserName = async(userName)=>{
     return await user.find({userName})
 }
 
-
+ 
 // get all users
 userService.getAllUsers = async (id) => {
     return await user.findById(id)

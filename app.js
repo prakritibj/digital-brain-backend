@@ -6,7 +6,7 @@ const cors = require('cors');
 const corsOptions = {
   origin: '*', 
   methods: 'GET,PUT,PATCH,POST,DELETE', 
-  allowedHeaders: 'Content-Type, Authorization', 
+  allowedHeaders: ['Content-Type', 'x-access-token'], 
   credentials: true, 
 };
 
@@ -19,3 +19,6 @@ const router = require("./api/route")
   require("./db")
 
   module.exports = app
+
+  // 
+  

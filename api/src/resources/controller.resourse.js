@@ -4,14 +4,24 @@ const resourceController = {}
 
 // Create a newresourse
 resourceController.createResourse = async (req, res) => {
-    const {name,  subcategoryID , link } = req.body
-    if (!name || !subcategoryID || !link) {
+    const {name ,link,description,subcategoryId} = req.body
+    if (!name || !description || !link || !subcategoryId ) {
     return res.send({
-        status: false, msg: "name,subcategoryID, and link are required", data: null
+        status: false, msg: "name,description,and link and subcategory id are required", data: null
     })
 }
 try {
-    const newResourse= await resourseService.createResourse({name, subcategoryID, link })
+
+    const exists = await resourseService.resourseExists( name);
+    console.log(exists,"exist")
+    if (exists) {
+        return res.send({
+            status: false,
+            msg: "resourse with this resourse name already exists",
+            data: null
+        });
+    }
+    const newResourse= await resourseService.createResourse({name,description,link,subcategoryId })
     console.log(newResourse,"newresourse")
    
     return res.send({status:true,msg: "resourse created successfully",data: newResourse
@@ -22,6 +32,111 @@ try {
     })
 }
 }
+// get all resourse
+resourceController.getAllResourse = async (req, res) => {
+    try {
+        const allResource = await resourseService.getAllResourse()
+        console.log(allResource ,"hii")
+        if (allResource.length) {
+            return res.send({ status: true, msg:"all resourse data getted",data:allResource  })
+        }
+        return res.send({ msg: "resourse are not found", data: null, status: false })
+    } catch (err) {
+        console.log(err)
+        return res.send({ status: false, data: [], error: err })
+    }
+}
+
+//get single resourse
+resourceController.getSingleResourse  = async (req, res) =>{
+    const { id } = req.params;
+    try {
+        const getSingleResourse  = await resourseService.getSingleResourse (id)
+        console.log(getSingleResourse  ,"getsingle")
+        if (getSingleResourse) {
+            return res.send({ status: true, msg:" data getted",data: getSingleResourse  })
+        }
+        return res.send({ msg: "resourse are not found", data: null, status: false })
+    } catch (err) {
+        console.log(err)
+        return res.send({ status: false, data: [], error: err })
+    }
+  }
+
+// Delete resourse
+resourceController.deleteResousrse = async (req, res) => {
+    const { id } = req.params
+
+if (!id) {
+    return res.send({
+        status: false,
+        msg: "Resousrse ID is required",
+        data: null
+    })
+}
+
+try {
+    const deleted = await resourseService.deleteResousrse (id ,{$set : {isDeleted : true}})
+    if (!deleted) {
+        return res.send({
+            status: false,
+            msg: "Resousrse not found",
+            data: null
+        })
+    }
+    return res.send({
+        status:true,
+        msg: "Resousrse deleted successfully",
+        data: null
+    })
+} catch (error) {
+    console.error('Delete Resousrse error:', error)
+    return res.send({
+        status: false,
+        msg: "Error deleting Resousrse",
+        data: null
+    })
+}
+}
+
+// Update a Resousrse
+resourceController.updateResousrse= async (req, res) => {
+    const { id } = req.params
+    const updateData = req.body
+
+if (!id) {
+    return res.send({
+        status: false,
+        msg: "Resousrse ID is required",
+        data: null
+    })
+}
+
+try {
+    const updated = await subcategoryService.updateResousrse(id, updateData)
+    if (!updated  ||updated.isDeleted) {
+        return res.send({
+            status: false,
+            msg: "Resousrse not found",
+            data: null
+        })
+    }
+    return res.send({
+        status:true,
+        msg: "Resousrse updated successfully",
+        data: null
+    })
+} catch (error) {
+    console.error('Update Resousrse error:', error)
+    return res.send({
+        status: false,
+        msg: "Error updating Resousrse",
+        data: null
+    })
+}
+}
+
+
 
 
 

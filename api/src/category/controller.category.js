@@ -23,7 +23,7 @@ categoryController.createCategory = async (req, res) => {
         const newCategory = await categoryService.createCategory({ categoryName})
         console.log(newCategory, "newcategory")
         return res.send({
-            status: "Ok", msg: " category created successfully", data: newCategory
+            status: true, msg: " category created successfully", data: newCategory
         })
     } catch (error) {
         console.error('Creat category  error:', error)
@@ -34,55 +34,107 @@ categoryController.createCategory = async (req, res) => {
     }
 }
 
-
 // get all category
 categoryController.getAllCategory = async (req, res) => {
     try {
         const AllCategory = await categoryService.getAllcategory()
         console.log(AllCategory ,"hii")
         if (AllCategory.length) {
-            return res.send({ status: "OK", msg:"all notes data getted",data:AllCategory  })
+            return res.send({ status: true, msg:"all category data getted",data:AllCategory  })
         }
-        return res.send({ msg: "notes are not found", data: null, status: false })
+        return res.send({ msg: "category are not found", data: null, status: false })
     } catch (err) {
         console.log(err)
         return res.send({ status: false, data: [], error: err })
     }
 }
 
-// ---------------------------------------------------
+// // /get all sub category
+categoryController.getAllCategories = async (req, res) => {
+    try {
+        const allCategories = await categoryService.getAllcategory();
+        const allSubCategory = await subcategoryService.getAllSubcategories();
+        
 
-categoryController.getSubcategoriesByCategoryId = async (req,res)=>{
-    // categoryId
-    const { id } = req.params;
-    console.log(id,"id")
+        
+        const finalArray =  allCategories.map((cat) => {
+            console.log(cat?._id.toString() , "allSubCategory")
+            
+            return {
+                categoryId: cat._id,
+                categoryName: cat.categoryName,
+                subCategories: allSubCategory.filter(subCat=> subCat.categoryId.toString() === cat?._id?.toString()) // Adjust this as needed
+            };
+        });
 
-    if (!id) {
         return res.send({
-            status: false,
-            msg: "Category id is required",
-            data: null
-        })
-    }
-    try{
-        const subcategories =  await subcategoryService.getSubcategoriesByCategoryId(id)
-        console.log(subcategories, "subcate")
-
-        if (subcategories.length) {
-            return res.send({ status: "true", msg:"subcategory as pr categoryid recive succssfully",data:subcategories })
-        }
-        return res.send({ msg: "there is no subcategories", data: null, status: false })
+            status: true,
+            msg: "All categories retrieved successfully",
+            data: finalArray
+        });
     } catch (err) {
-        console.log(err , "subcategory error")
+        console.error(err);
+        return res.status(500).send({
+            status: false,
+            data: [],
+            error: err.message
+        });
+    }
+};
+
+
+// /getsingle
+
+categoryController.getSingleCategory = async (req, res) =>{
+    const { id } = req.params;
+    try {
+        const getSingleCategory = await categoryService.getSingleCategory(id)
+        console.log(getSingleCategory ,"getsingle")
+        if (getSingleCategory) {
+            return res.send({ status: true, msg:" data getted",data: getSingleCategory })
+        }
+        return res.send({ msg: "category are not found", data: null, status: false })
+    } catch (err) {
+        console.log(err)
         return res.send({ status: false, data: [], error: err })
     }
-
-    }
-
+  }
 
 
+// ---------------------------------------------------
 
-// Delete a note
+// categoryController.getSubcategoriesByCategoryId = async (req,res)=>{
+//     // categoryId
+//     const { id } = req.params;
+//     console.log(id,"id")
+
+//     if (!id) {
+//         return res.send({
+//             status: false,
+//             msg: "Category id is required",
+//             data: null
+//         })
+//     }
+//     try{
+//         const subcategories =  await subcategoryService.getSubcategoriesByCategoryId(id)
+//         console.log(subcategories, "subcate")
+
+//         if (subcategories.length) {
+//             return res.send({ status: "true", msg:"subcategory as pr categoryid recive succssfully",data:subcategories })
+//         }
+//         return res.send({ msg: "there is no subcategories", data: null, status: false })
+//     } catch (err) {
+//         console.log(err , "subcategory error")
+//         return res.send({ status: false, data: [], error: err })
+//     }
+
+//     }
+// ---------------------------------------------------------------------------------------------------
+
+
+
+
+// Delete a category
 categoryController.deletecategory = async (req, res) => {
     const { id } = req.params;
 
@@ -94,7 +146,7 @@ categoryController.deletecategory = async (req, res) => {
         });
     }
     try {
-        const deleteCategory = await categoryService.deletecategory(id);
+        const deleteCategory = await categoryService.deletecategory(id,{$set : {isDeleted : true}});
         if (!deleteCategory) {
             return res.send({
                 status: false,
@@ -103,7 +155,7 @@ categoryController.deletecategory = async (req, res) => {
             });
         }
         return res.send({
-            status: "OK",
+            status: true,
             msg: "category deleted successfully",
             data: deleteCategory
         });
@@ -117,7 +169,7 @@ categoryController.deletecategory = async (req, res) => {
     }
 };
 
-
+// update
 
 categoryController.updateCategory = async (req, res) => {
     const { id } = req.params;
@@ -132,7 +184,7 @@ categoryController.updateCategory = async (req, res) => {
     }
     try {
         const updatedcategory= await categoryService.updateCategory(id, updateData);
-        if (!updatedcategory) {
+        if (!updatedcategory ||updatedcategory.isDeleted) {
             return res.send({
                 status: false,
                 msg: "category not found",
@@ -153,6 +205,8 @@ categoryController.updateCategory = async (req, res) => {
         });
     }
 };
+
+
 
 
 module.exports = categoryController;

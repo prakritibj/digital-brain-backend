@@ -1,27 +1,30 @@
  
 const resourse = require("./model.resource")
 const resourseService = {}
-// const subcategory = require("../subcategorys/model.subcategory")
 
-resourseService.createResourse = async ({name,subcategoryID, link})=>{
-    return await  resourse.create({name, subcategoryID, link})
-    //  console.log(newResorse, "newResorse")
+resourseService.createResourse = async ({name,description, link, subcategoryId})=>{
+    return await  resourse.create({name,description,link,subcategoryId})
 
 }
-// subcategoryID ya isi ki ID
+// resourse ya isi ki ID
 resourseService.getAllResourse = async (id) => {
-    return await resourse.find({id});
+    return await resourse.find({id,isDeleted: false});
 };
 resourseService.resourseExists = async (name) => {
     return await resourse.findOne({name});
 };
-// Delete a category by ID
-resourseService.deleteResousrse = async (id) => {
-    return await resourse.findByIdAndDelete(id)
-};
+// Delete a resourse by ID
 
-// update a category by ID
-resourseService.updateCategory = async (id, updates) => {
+resourseService.deleteResousrse = async (id,updateField) => {
+    return await resourse.findByIdAndUpdate({_id: id}, {...updateField}, {new :true})
+}
+
+// get singfle resourse
+resourseService.getSingleResourse = async (id) => {
+    return await resourse.findById(id)
+}
+// update a resourse by ID
+resourseService.updateResousrse= async (id, updates) => {
 return await resourse.findByIdAndUpdate(id, updates, { new: true });
 }
 
