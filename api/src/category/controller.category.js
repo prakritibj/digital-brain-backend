@@ -58,8 +58,7 @@ categoryController.getAllCategories = async (req, res) => {
 
         
         const finalArray =  allCategories.map((cat) => {
-            console.log(cat?._id.toString() , "allSubCategory")
-            
+            // console.log(cat?._id.toString() , "allSubCategory"
             return {
                 categoryId: cat._id,
                 categoryName: cat.categoryName,

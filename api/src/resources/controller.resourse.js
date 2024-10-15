@@ -51,7 +51,7 @@ resourceController.getAllResourse = async (req, res) => {
 resourceController.getSingleResourse  = async (req, res) =>{
     const { id } = req.params;
     try {
-        const getSingleResourse  = await resourseService.getSingleResourse (id)
+        const getSingleResourse  = await resourseService.getSingleResourse(id)
         console.log(getSingleResourse  ,"getsingle")
         if (getSingleResourse) {
             return res.send({ status: true, msg:" data getted",data: getSingleResourse  })
@@ -103,6 +103,8 @@ try {
 resourceController.updateResousrse= async (req, res) => {
     const { id } = req.params
     const updateData = req.body
+    console.log(id,"id")
+    console.log(updateData, "updT")
 
 if (!id) {
     return res.send({
@@ -113,7 +115,7 @@ if (!id) {
 }
 
 try {
-    const updated = await subcategoryService.updateResousrse(id, updateData)
+    const updated = await resourseService.updateResousrse(id, updateData)
     if (!updated  ||updated.isDeleted) {
         return res.send({
             status: false,
@@ -135,9 +137,6 @@ try {
     })
 }
 }
-
-
-
 
 
 module.exports = resourceController
