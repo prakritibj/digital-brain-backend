@@ -9,7 +9,6 @@ const router = express.Router()
   router.get("/getSingleSubCategory/:id",authHelper ,subcategoryController.getSingleSubCategory)
   router.delete("/delete/:id",authHelper ,subcategoryController.deleteSubcategory)
   router.patch("/update/:id",authHelper ,subcategoryController.updateSubcategory)
-  // ====
   router.get("/getSubcategoryWithResources/:id", authHelper, subcategoryController.getSubcategoryWithResources);
 
 

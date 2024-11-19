@@ -1,5 +1,4 @@
 const subcategoryService = require('./services.subcategory')
-// const resourseService = require("../resources/services.resource")
 const resourseService = require("../resources/services.resource")
 const subcategoryController = {}
 
@@ -17,6 +16,15 @@ if (!subcategoryName || !categoryId) {
 try {
     const exists = await subcategoryService.subcategoryExists(subcategoryName)
     if (exists) {
+        if (exists.isDeleted) {
+            // If it exists and is marked as deleted, update it to "isDeleted: false"
+            const restoredSubcategory = await subcategoryService.updateSubcategory(existingCategory._id, { isDeleted: false });
+            return res.send({
+                status: true,
+                msg: "subcategory restored successfully",
+                data: restoredSubcategory
+            });
+        }
         return res.send({
             status: false,
             msg: "Subcategory with this name already exists",
@@ -40,22 +48,6 @@ try {
 }
 }
 
-
-// subcategoryController.getAllSubcategories = async (req, res) => {
-//     try {
-//         const AllSubCategory = await subcategoryService.getAllSubcategories()
-//         console.log(AllSubCategory ,"hii")
-//         if (AllSubCategory.length) {
-//             return res.send({ status: true, msg:"all subcategory data getted",data:AllSubCategory  })
-//         }
-//         return res.send({ msg: "subcategories are not found", data: null, status: false })
-//     } catch (err) {
-//         console.log(err)
-//         return res.send({ status: false, data: [], error: err })
-//     }
-// }
-// get all subcategories via resourses
-// ===========================================
 subcategoryController.getAllSubcategories = async (req, res) => {
     try {
         // Fetch all subcategories
@@ -89,7 +81,7 @@ subcategoryController.getAllSubcategories = async (req, res) => {
     }
 };
 
-// ====================================
+
 // / Get single subcategory
 subcategoryController.getSingleSubCategory = async (req, res) =>{
     const { id } = req.params;

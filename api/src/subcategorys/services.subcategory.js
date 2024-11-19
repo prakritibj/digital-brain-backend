@@ -8,14 +8,14 @@ subcategoryService.createSubcategory = async ({ subcategoryName, categoryId }) =
     return newSubcategory
 }
 
-// -------------------subcategory ko id se category id se 
+// subcategory ko id se category id se 
 subcategoryService.getSubcategoriesByCategoryId = async (categoryId) => {
     console.log(categoryId)
     let res = await subcategory.find({ categoryId });
 
     return res
 };
-// -----------------------------------------------------------------------------------
+
 
 
 //  get all subcategory

@@ -19,7 +19,7 @@ resourseService.deleteResousrse = async (id,updateField) => {
     return await resourse.findByIdAndUpdate({_id: id}, {...updateField}, {new :true})
 }
 
-// get singfle resourse
+// get single resourse
 resourseService.getSingleResourse = async (id) => {
     return await resourse.findById(id)
 }

@@ -1,3 +1,4 @@
+const { exist } = require("joi")
 const resourseService = require("./services.resource")
 
 const resourceController = {}
@@ -7,7 +8,9 @@ resourceController.createResourse = async (req, res) => {
     const {name ,link,description,subcategoryId} = req.body
     if (!name || !description || !link || !subcategoryId ) {
     return res.send({
-        status: false, msg: "name,description,and link and subcategory id are required", data: null
+        status: false,
+         msg: "name,description,and link and subcategory id are required",
+          data: null
     })
 }
 try {
@@ -15,6 +18,15 @@ try {
     const exists = await resourseService.resourseExists( name);
     console.log(exists,"exist")
     if (exists) {
+        if(exists.isDeleted){
+             // If it exists and is marked as deleted, update it to "isDeleted: false"
+             const restoredResourse= await resourseService.updateResousrse(existingCategory._id, { isDeleted: false });
+             return res.send({
+                 status: true,
+                 msg: "resourse restored successfully",
+                 data: restoredResourse
+             });
+        }
         return res.send({
             status: false,
             msg: "resourse with this resourse name already exists",
@@ -28,7 +40,8 @@ try {
     })
 } catch (error) {
     console.error('Create resourse error:', error)
-    return res.send({ status: false,msg: "Error creating resourse",data: null
+    return res.send({
+         status: false,msg: "Error creating resourse",data: null
     })
 }
 }
@@ -72,12 +85,12 @@ if (!id) {
         status: false,
         msg: "Resousrse ID is required",
         data: null
-    })
+    }) 
 }
 
 try {
     const deleted = await resourseService.deleteResousrse (id ,{$set : {isDeleted : true}})
-    if (!deleted) {
+    if (!deleted ) {
         return res.send({
             status: false,
             msg: "Resousrse not found",
@@ -87,7 +100,7 @@ try {
     return res.send({
         status:true,
         msg: "Resousrse deleted successfully",
-        data: null
+        data: deleted
     })
 } catch (error) {
     console.error('Delete Resousrse error:', error)
@@ -126,7 +139,7 @@ try {
     return res.send({
         status:true,
         msg: "Resousrse updated successfully",
-        data: null
+        data: updated
     })
 } catch (error) {
     console.error('Update Resousrse error:', error)

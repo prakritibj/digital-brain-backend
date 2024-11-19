@@ -20,5 +20,3 @@ const router = require("./api/route")
 
   module.exports = app
 
-  // 
-  

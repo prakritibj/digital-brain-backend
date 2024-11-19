@@ -1,6 +1,5 @@
 const category = require("./model.category")
 const categoryService = {}
-// const subcategorymodel =  require("../subcategorys/model.subcategory")
 
 
 categoryService.createCategory = async ({categoryName,id})=>{

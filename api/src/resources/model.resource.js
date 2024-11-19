@@ -21,12 +21,12 @@ description: {
   },
   isDeleted: {
     type: Boolean,
-    default: false, // Defaults to false when a category is created
+    default: false, 
   },
    subcategoryId: {
-    type: mongoose.Schema.Types.ObjectId, // Assuming subcategory is another document
-    ref: 'Subcategory', // Reference to the Subcategory model
-    required: true // Make this required if needed
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Subcategory', 
+    required: true 
   }
 },
  {

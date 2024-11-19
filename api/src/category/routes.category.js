@@ -10,7 +10,6 @@ const router = express.Router()
   router.get("/getSingleCategory/:id",authHelper, categoryController.getSingleCategory)
   router.delete("/delete/:id",authHelper ,categoryController.deletecategory)
   router.patch("/update/:id",authHelper ,categoryController.updateCategory)
-  // router.get('/:id/subcategories', categoryController.getSubcategoriesByCategoryId);
   router.get("/getAllCategories",authHelper ,categoryController.getAllCategories)
 
 

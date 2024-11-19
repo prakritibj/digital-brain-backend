@@ -19,7 +19,7 @@ mongoose.Schema({
     },
     isDeleted: {
         type: Boolean,
-        default: false, // Defaults to false when a category is created
+        default: false, 
     },
 })
 module.exports = mongoose.model("user",userSchema)
